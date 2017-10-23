@@ -1,0 +1,116 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.8.RELEASE'
+		
+		//springBootVersion = '2.0.0.M4'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "http://repo.spring.io/libs-release" }
+    	maven { url "http://repo.spring.io/libs-milestone" }
+    	maven { url "http://repo.spring.io/libs-snapshot" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
+	}
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'project-report'
+
+group = 'com.revature.revpro'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url "http://repo.spring.io/libs-release" }
+    	maven { url "http://repo.spring.io/libs-milestone" }
+    	maven { url "http://repo.spring.io/libs-snapshot" }
+}
+
+
+configurations.all {
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.group == 'org.springframework') {
+			details.useVersion '5.0.0.RELEASE'
+		}
+		if (details.requested.group == 'org.springframework.security') {
+			//details.useVersion '5.0.0.M4'
+			//details.useVersion '4.2.3.RELEASE'
+		}
+	}
+}
+
+//ext['spring.version'] = '5.0.0.RELEASE'
+
+ext {
+	springCloudVersion = 'Dalston.SR4'
+}
+
+dependencies {
+	
+	compile('org.springframework.cloud:spring-cloud-starter-oauth2')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-data-rest')
+	//compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.2.0.RELEASE'
+	
+	
+	//compile('org.springframework:spring-core:5.0.0.RELEASE')
+	//compile('org.springframework:spring-beans:5.0.0.RELEASE')
+	//compile('org.springframework:spring-webmvc:5.0.0.RELEASE')
+	//compile('org.springframework:spring-context:5.0.0.RELEASE')
+	//compile('org.springframework:spring-orm:5.0.0.RELEASE')
+	
+	//compile('org.springframework.data:spring-data-rest-webmvc:3.0.0.RELEASE')
+	//compile('org.springframework.data:spring-data-jpa:2.0.0.RELEASE')
+	compile('org.hibernate:hibernate-core:5.2.11.Final')
+	compile('org.hibernate:hibernate-entitymanager:5.2.11.Final')
+	compile('org.hibernate:hibernate-java8:5.2.11.Final')
+	compile('org.springframework.security:spring-security-jwt:1.0.8.RELEASE')
+	
+	
+	
+	
+	compile('io.springfox:springfox-swagger2:2.7.0')
+	compile('io.springfox:springfox-swagger-ui:2.7.0')
+	
+		
+	
+	
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.2'	
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.2'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.2'
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.1')
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.2')
+	
+	
+	compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser', version: '3.0.0.RELEASE'
+	compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
+	
+	
+	runtime('org.springframework.boot:spring-boot-devtools')
+	runtime('mysql:mysql-connector-java')
+	compileOnly('org.projectlombok:lombok')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	//testCompile('org.springframework.security:spring-security-test')
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2.1'
+}
+
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
